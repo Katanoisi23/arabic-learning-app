@@ -5,7 +5,6 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -13,6 +12,7 @@ import {
 import { BottomTabs } from "../components/BottomTabs";
 import { Header } from "../components/Header";
 import { ProgressCircle } from "../components/ProgressCircle";
+import { styles } from "../styles";
 
 // массив книг
 export const BOOKS = [
@@ -123,106 +123,3 @@ export default function BooksScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#F5E9DC",
-  },
-  root: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingTop: 16,
-    paddingBottom: 24,
-  },
-  currentCard: {
-    backgroundColor: "#7B5E3F",
-    borderRadius: 16,
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  currentLeft: {
-    flex: 1,
-    marginRight: 16,
-  },
-  currentTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 4,
-  },
-  currentSubtitle: {
-    fontSize: 12,
-    color: "#E2D3C4",
-    marginBottom: 12,
-  },
-  currentButton: {
-    backgroundColor: "#FFFFFF",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    alignSelf: "flex-start",
-  },
-  currentButtonText: {
-    color: "#7B5E3F",
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-  currentRight: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  bookCard: {
-    backgroundColor: "#FFFBF8",
-    borderRadius: 16,
-    flexDirection: "row",
-    padding: 12,
-    marginBottom: 16,
-    alignItems: "center",
-  },
-  bookCover: {
-    width: 60,
-    height: 80,
-    borderRadius: 8,
-    marginRight: 12,
-  },
-  bookInfo: {
-    flex: 1,
-  },
-  bookTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#3A2816",
-    marginBottom: 4,
-  },
-  volumeBadge: {
-    backgroundColor: "#F5E9DC",
-    alignSelf: "flex-start",
-    paddingVertical: 2,
-    paddingHorizontal: 6,
-    borderRadius: 4,
-    marginBottom: 4,
-  },
-  volumeBadgeText: {
-    fontSize: 10,
-    color: "#7B5E3F",
-    fontWeight: "bold",
-  },
-  bookArabic: {
-    fontSize: 14,
-    color: "#8B4513",
-    marginBottom: 2,
-  },
-  bookCourse: {
-    fontSize: 12,
-    color: "#A09384",
-  },
-});
