@@ -26,13 +26,20 @@ const COLORS = {
 export default function LessonScreen() {
   const router = useRouter();
   // Вытаскиваем lessonId и параметр section (например, ?section=dialogues)
-  const { lessonId, section } = useLocalSearchParams<{
+  const { lessonId, section, textId, exerciseId } = useLocalSearchParams<{
     lessonId: string;
     section?: string;
+    textId?: string;
+    exerciseId?: string;
   }>();
 
   // Запрашиваем данные урока у нашего "Реестра"
   const lesson = getMedinaLesson(Number(lessonId));
+  const currentText = lesson?.texts?.find((t) => t.id === textId) || lesson?.texts?.[0];
+  const currentExercise = lesson?.exercises?.find((e) => e.id === exerciseId) || lesson?.exercises?.[0];
+
+  const isExerciseMode = section === "exercises";
+  const contentToRender = isExerciseMode ? currentExercise : currentText;
 
   // Защита: если урока нет в базе, показываем заглушку
   if (!lesson) {
@@ -97,8 +104,11 @@ export default function LessonScreen() {
 
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerSubtitle}>{lesson.title}</Text>
-          {lesson.subtitle && (
-            <Text style={styles.headerTitle}>{lesson.subtitle}</Text>
+          {contentToRender?.title && (
+            <Text style={styles.headerTitle}>{contentToRender.title}</Text>
+          )}
+          {contentToRender?.subtitle && (
+            <Text style={[styles.headerSubtitle, { marginTop: 4, color: COLORS.accent }]}>{contentToRender.subtitle}</Text>
           )}
         </View>
 
@@ -106,9 +116,9 @@ export default function LessonScreen() {
         <View style={styles.backButtonPlaceholder} />
       </View>
 
-      {/* Список фраз/диалогов */}
+      {/* Список фраз/диалогов/упражнений */}
       <FlatList
-        data={lesson.dialogues}
+        data={contentToRender?.dialogues || []}
         renderItem={renderDialogueLine}
         keyExtractor={(item, index) => item.id || index.toString()}
         contentContainerStyle={styles.listContent}

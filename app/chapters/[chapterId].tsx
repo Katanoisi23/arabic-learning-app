@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { BottomTabs } from "../../components/BottomTabs";
 import { MEDINA_CHAPTERS } from "../../data/books/medina/chapters";
 import { getMedinaLesson } from "../../data/books/medina/index";
 
@@ -17,10 +18,10 @@ import { getMedinaLesson } from "../../data/books/medina/index";
 const COLORS = {
   background: "#F5F0E8", // Light beige
   card: "#FFFFFF", // White containers
-  accent: "#8D7456", // Muted mocha brown
-  menuItemBg: "#FDFBF7", // Very light beige for menu items
-  textDark: "#000000", // Bold black
-  textMuted: "#666666",
+  accent: "#8D7456", // Mocha brown
+  menuItemBg: "#F2EAE0", // Beige for menu items
+  textDark: "#3A2816", // Dark brown/black
+  textMuted: "#9E8B7A",
 };
 
 // Компонент пункта меню (широкие кнопки)
@@ -36,16 +37,24 @@ const LessonMenuItem = ({
   onPress?: () => void;
 }) => (
   <TouchableOpacity
-    style={[styles.menuItem, isLocked && styles.menuItemLocked]}
+    style={styles.menuItem}
     activeOpacity={isLocked ? 1 : 0.7}
     onPress={isLocked ? undefined : onPress}
   >
-    <Text style={styles.menuItemText}>{title}</Text>
-    <Ionicons
-      name={isLocked ? "lock-closed" : icon}
-      size={20}
-      color={isLocked ? "#BDBDBD" : COLORS.accent}
-    />
+    <View style={styles.menuItemLeft}>
+      {isLocked && <Ionicons name="lock-closed-outline" size={20} color="#BDBDBD" />}
+    </View>
+    <View style={styles.menuItemRight}>
+      <Text style={[styles.menuItemText, isLocked && styles.menuItemTextLocked]}>
+        {title}
+      </Text>
+      <Ionicons
+        name={icon}
+        size={20}
+        color={isLocked ? "#BDBDBD" : COLORS.accent}
+        style={styles.menuItemIcon}
+      />
+    </View>
   </TouchableOpacity>
 );
 
@@ -64,6 +73,8 @@ export default function ChapterDetailScreen() {
       id: id,
       title: lessonData ? lessonData.title : `Урок ${id}`,
       subtitle: lessonData?.subtitle || "",
+      texts: lessonData?.texts || [],
+  exercises: lessonData?.exercises || [],
     };
   });
 
@@ -74,43 +85,61 @@ export default function ChapterDetailScreen() {
         <Text style={styles.lessonNumberText}>{item.id}</Text>
       </View>
 
-      {/* Заголовки урока */}
-      <Text style={[styles.cardArabicTitle, item.title.includes('Урок') ? { fontSize: 24, textAlign: 'left' } : {}]}>
-        {item.title}
-      </Text>
-      {!!item.subtitle && (
-        <Text style={[styles.cardSubtitle, { textAlign: item.title.includes('Урок') ? 'left' : 'right', fontSize: 18, color: COLORS.accent, fontWeight: '700' }]}>
-          {item.subtitle}
+      {/* Заголовки урока с отступом справа, чтобы не перекрывать кружок */}
+      <View style={styles.cardHeaderArea}>
+        <Text style={styles.cardArabicTitle}>
+          {item.title}
         </Text>
-      )}
+        {!!item.subtitle && (
+          <Text style={styles.cardSubtitle}>
+            {item.subtitle}
+          </Text>
+        )}
+      </View>
 
       {/* Вертикальный список пунктов меню */}
       <View style={styles.menuContainer}>
-        <LessonMenuItem
-          title="Текст урока"
-          icon="book"
-          onPress={() =>
-            router.push(`/lessons/${item.id}?section=dialogues` as any)
-          }
-        />
+        {item.texts?.map((textItem: any, index: number) => (
+          <LessonMenuItem
+            key={textItem.id}
+            title={`Текст урока ${index + 1}`}
+            icon="book"
+            onPress={() =>
+              router.push(`/lessons/${item.id}?textId=${textItem.id}` as any)
+            }
+          />
+        ))}
+
         <LessonMenuItem
           title="Словарь"
-          icon="text"
+          icon="journal"
           onPress={() =>
             router.push(`/lessons/${item.id}?section=vocabulary` as any)
           }
         />
-        <LessonMenuItem title="Упражнения" icon="trophy" isLocked={true} />
+        <LessonMenuItem
+          title="Упражнения"
+          icon="trophy"
+          isLocked={!item.exercises || item.exercises.length === 0}
+          onPress={
+            item.exercises && item.exercises.length > 0
+              ? () =>
+                  router.push(
+                    `/lessons/${item.id}?section=exercises&exerciseId=${item.exercises[0].id}` as any
+                  )
+              : undefined
+          }
+        />
       </View>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFBF8" />
 
-      <SafeAreaView style={styles.safeArea}>
-        {/* Top Navigation & Center Text */}
+      {/* Top Navigation & Center Text */}
+      <SafeAreaView style={styles.headerSafeArea}>
         <View style={styles.header}>
           {/* Маленькая круглая кнопка назад слева */}
           <TouchableOpacity
@@ -123,7 +152,7 @@ export default function ChapterDetailScreen() {
               }
             }}
           >
-            <Ionicons name="chevron-back" size={20} color={COLORS.textDark} />
+            <Ionicons name="chevron-back" size={24} color="#8A6D53" />
           </TouchableOpacity>
 
           {/* Текст по центру */}
@@ -133,7 +162,9 @@ export default function ChapterDetailScreen() {
             <Text style={styles.headerSubtitle}>{chapter.description}</Text>
           </View>
         </View>
+      </SafeAreaView>
 
+      <SafeAreaView style={styles.safeArea}>
         {/* Content Cards */}
         <FlatList
           data={chapterLessons}
@@ -144,22 +175,7 @@ export default function ChapterDetailScreen() {
         />
       </SafeAreaView>
 
-      {/* Bottom Navigation Bar */}
-      <View style={styles.bottomNavBar}>
-        <View style={styles.bottomNavIcons}>
-          <TouchableOpacity>
-            <Ionicons name="book" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name="albums" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name="settings-sharp" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-        {/* White home indicator line */}
-        <View style={styles.homeIndicator} />
-      </View>
+      <BottomTabs />
     </View>
   );
 }
@@ -169,140 +185,130 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+  headerSafeArea: {
+    backgroundColor: "#FFFBF8",
+    borderBottomWidth: 1,
+    borderBottomColor: "#D9CFC4",
+  },
   safeArea: {
     flex: 1,
   },
   header: {
-    paddingTop: 20,
+    paddingTop: 10,
     paddingHorizontal: 20,
-    paddingBottom: 24,
+    paddingBottom: 16,
     position: "relative",
     alignItems: "center",
   },
   backButton: {
     position: "absolute",
     left: 20,
-    top: 20,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: COLORS.card,
+    top: 10,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "#EAE1D6",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
     zIndex: 10,
   },
   headerTextContainer: {
     alignItems: "center",
-    marginTop: 4,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "800",
-    color: COLORS.textDark,
-    textTransform: "uppercase",
-    marginBottom: 4,
+    color: "#3A2816",
+    marginBottom: 2,
   },
   headerArabic: {
-    fontSize: 36,
-    color: COLORS.accent,
-    fontWeight: "600",
+    fontSize: 34,
+    color: "#3A2816",
+    fontWeight: "500",
     marginBottom: 4,
   },
   headerSubtitle: {
-    fontSize: 14,
-    color: COLORS.textMuted,
+    fontSize: 12,
+    color: "#8A6D53",
   },
   listContent: {
+    paddingTop: 20,
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
   cardContainer: {
     backgroundColor: COLORS.card,
     borderRadius: 24,
-    padding: 24,
+    padding: 20,
     marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
     position: "relative",
   },
   lessonNumberCircle: {
     position: "absolute",
-    top: 20,
-    right: 20,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: COLORS.background,
+    top: 24,
+    right: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#EBE2D8",
     alignItems: "center",
     justifyContent: "center",
   },
   lessonNumberText: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: COLORS.accent,
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#3A2816",
+  },
+  cardHeaderArea: {
+    paddingRight: 60,
+    alignItems: "flex-end", // All text in header aligns to right
+    marginBottom: 24,
   },
   cardArabicTitle: {
-    fontSize: 28,
-    color: COLORS.textDark,
+    fontSize: 32,
+    color: "#3A2816",
     fontWeight: "600",
-    marginBottom: 4,
-    textAlign: "right", // Арабский читается справа налево
-  },
-  cardSubtitle: {
-    fontSize: 16,
-    color: COLORS.textMuted,
-    marginBottom: 24,
-    fontWeight: "500",
     textAlign: "right",
   },
+  cardSubtitle: {
+    fontSize: 14,
+    color: "#8A6D53",
+    fontWeight: "600",
+    textAlign: "right",
+    marginTop: 4,
+  },
   menuContainer: {
-    gap: 12,
+    gap: 8,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: COLORS.menuItemBg,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderRadius: 16,
+    backgroundColor: "#F2EAE0",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 12,
   },
-  menuItemLocked: {
-    backgroundColor: "#F2EFEA",
+  menuItemLeft: {
+    width: 30,
+    alignItems: "flex-start",
+  },
+  menuItemRight: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
   menuItemText: {
     fontSize: 16,
-    fontWeight: "600",
-    color: COLORS.textDark,
+    fontWeight: "700",
+    color: "#423325",
   },
-  bottomNavBar: {
-    backgroundColor: COLORS.accent,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    paddingTop: 16,
-    paddingBottom: 8, // Место под индикатор
-    paddingHorizontal: 40,
+  menuItemTextLocked: {
+    color: "#BDBDBD",
   },
-  bottomNavIcons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
+  menuItemIcon: {
+    marginLeft: 12,
   },
-  homeIndicator: {
-    width: 134,
-    height: 5,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 3,
-    alignSelf: "center",
-    marginBottom: 8,
-  },
+
 });
