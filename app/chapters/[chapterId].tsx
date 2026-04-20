@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import { BottomTabs } from "../../components/BottomTabs";
 import { MEDINA_CHAPTERS } from "../../data/books/medina/chapters";
@@ -73,66 +74,10 @@ export default function ChapterDetailScreen() {
       id: id,
       title: lessonData ? lessonData.title : `Урок ${id}`,
       subtitle: lessonData?.subtitle || "",
-      texts: lessonData?.texts || [],
-  exercises: lessonData?.exercises || [],
     };
   });
 
-  const renderLessonCard = ({ item }: { item: any }) => (
-    <View style={styles.cardContainer}>
-      {/* Кружок с номером урока */}
-      <View style={styles.lessonNumberCircle}>
-        <Text style={styles.lessonNumberText}>{item.id}</Text>
-      </View>
-
-      {/* Заголовки урока с отступом справа, чтобы не перекрывать кружок */}
-      <View style={styles.cardHeaderArea}>
-        <Text style={styles.cardArabicTitle}>
-          {item.title}
-        </Text>
-        {!!item.subtitle && (
-          <Text style={styles.cardSubtitle}>
-            {item.subtitle}
-          </Text>
-        )}
-      </View>
-
-      {/* Вертикальный список пунктов меню */}
-      <View style={styles.menuContainer}>
-        {item.texts?.map((textItem: any, index: number) => (
-          <LessonMenuItem
-            key={textItem.id}
-            title={`Текст урока ${index + 1}`}
-            icon="book"
-            onPress={() =>
-              router.push(`/lessons/${item.id}?textId=${textItem.id}` as any)
-            }
-          />
-        ))}
-
-        <LessonMenuItem
-          title="Словарь"
-          icon="journal"
-          onPress={() =>
-            router.push(`/lessons/${item.id}?section=vocabulary` as any)
-          }
-        />
-        <LessonMenuItem
-          title="Упражнения"
-          icon="trophy"
-          isLocked={!item.exercises || item.exercises.length === 0}
-          onPress={
-            item.exercises && item.exercises.length > 0
-              ? () =>
-                  router.push(
-                    `/lessons/${item.id}?section=exercises&exerciseId=${item.exercises[0].id}` as any
-                  )
-              : undefined
-          }
-        />
-      </View>
-    </View>
-  );
+  // Removed renderLessonCard function
 
   return (
     <View style={styles.container}>
@@ -166,13 +111,41 @@ export default function ChapterDetailScreen() {
 
       <SafeAreaView style={styles.safeArea}>
         {/* Content Cards */}
-        <FlatList
-          data={chapterLessons}
-          renderItem={renderLessonCard}
-          keyExtractor={(item) => item.id.toString()}
+        <ScrollView 
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
-        />
+        >
+          <View style={styles.cardContainer}>
+            {/* Кружок с номером главы */}
+            <View style={styles.lessonNumberCircle}>
+              <Text style={styles.lessonNumberText}>{chapter.id}</Text>
+            </View>
+
+            {/* Заголовки урока с отступом справа, чтобы не перекрывать кружок */}
+            <View style={styles.cardHeaderArea}>
+              <Text style={styles.cardArabicTitle}>
+                {chapter.arabicTitle}
+              </Text>
+              {!!chapter.title && (
+                <Text style={styles.cardSubtitle}>
+                  {chapter.title}
+                </Text>
+              )}
+            </View>
+
+            {/* Вертикальный список пунктов меню */}
+            <View style={styles.menuContainer}>
+              {chapterLessons.map((lesson) => (
+                <LessonMenuItem
+                  key={lesson.id}
+                  title={`${lesson.title} - ${lesson.subtitle}`}
+                  icon="book"
+                  onPress={() => router.push(`/lessons/${lesson.id}` as any)}
+                />
+              ))}
+            </View>
+          </View>
+        </ScrollView>
       </SafeAreaView>
 
       <BottomTabs />
