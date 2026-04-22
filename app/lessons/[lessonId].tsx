@@ -1,7 +1,7 @@
 // app/lessons/[lessonId].tsx
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FlatList,
   SafeAreaView,
@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { getMedinaLesson } from "../../data/books/medina/index";
+import { useProgress } from "../../context/ProgressContext";
 
 // Наша фирменная палитра
 const COLORS = {
@@ -29,6 +30,14 @@ export default function LessonScreen() {
   const { lessonId } = useLocalSearchParams<{
     lessonId: string;
   }>();
+  
+  const { setLastOpenedLessonId } = useProgress();
+
+  useEffect(() => {
+    if (lessonId) {
+      setLastOpenedLessonId(Number(lessonId));
+    }
+  }, [lessonId]);
 
   // Запрашиваем данные урока у нашего "Реестра"
   const lesson = getMedinaLesson(Number(lessonId));

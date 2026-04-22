@@ -8,24 +8,25 @@ const { width } = Dimensions.get("window");
 const guidelineBaseWidth = 375;
 const scale = (size: number) => (width / guidelineBaseWidth) * size;
 
-// Таббар сам знает свои кнопки, ему BOOKS не нужен
+import { BookIcon, DictionaryIcon, SettingsIcon } from "./Icons";
+
 const TABS = [
   {
     key: "books",
-    icon: "book-outline" as const,
-    route: "/" as const,
+    IconComponent: BookIcon,
+    route: "/",
   },
   {
     key: "lessons",
-    icon: "reader-outline" as const,
-    route: "/dictionary" as const,
+    IconComponent: DictionaryIcon,
+    route: "/dictionary",
   },
   {
     key: "settings",
-    icon: "settings-outline" as const,
-    route: "/settings" as const,
+    IconComponent: SettingsIcon,
+    route: "/settings",
   },
-] as const;
+];
 
 export function BottomTabs() {
   const router = useRouter();
@@ -43,8 +44,7 @@ export function BottomTabs() {
             activeOpacity={0.7}
             onPress={() => router.push(tab.route as any)}
           >
-            <Ionicons
-              name={tab.icon}
+            <tab.IconComponent
               size={scale(24)}
               color={isActive ? "#FFFFFF" : "#E5D8C8"}
             />

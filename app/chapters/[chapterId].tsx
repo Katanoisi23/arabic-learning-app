@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   cardHeaderArea: {
     paddingRight: 60,
     alignItems: "flex-end", // All text in header aligns to right
-    marginBottom: 24,
+    marginBottom: 14,
   },
   cardArabicTitle: {
     fontSize: 32,

@@ -6,7 +6,7 @@ const { width } = Dimensions.get("window");
 const guidelineBaseWidth = 375;
 
 // Функция масштабирования под ширину экрана
-const scale = (size: number) => (width / guidelineBaseWidth) * size;
+export const scale = (size: number) => (width / guidelineBaseWidth) * size;
 
 export const styles = StyleSheet.create({
   safeArea: {

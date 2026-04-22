@@ -1,7 +1,6 @@
-// app/components/Header.tsx (упрощенная версия)
-import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Dimensions, StyleSheet, Text, TextInput, View } from "react-native";
+import { SearchIcon } from "./Icons";
 
 const { width } = Dimensions.get("window");
 const guidelineBaseWidth = 375;
@@ -33,12 +32,9 @@ export function Header({
       {showSearch && (
         <View style={styles.searchRow}>
           <View style={styles.searchBox}>
-            <Ionicons
-              name="search"
-              size={scale(18)}
-              color="#B89B7D"
-              style={styles.searchIcon}
-            />
+            <View style={styles.searchIcon}>
+              <SearchIcon size={scale(18)} color="#856D53" />
+            </View>
             <TextInput
               placeholder={searchPlaceholder}
               placeholderTextColor="#C8B2A0"
