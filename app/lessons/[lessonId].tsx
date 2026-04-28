@@ -1,4 +1,3 @@
-// app/lessons/[lessonId].tsx
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect } from "react";
@@ -11,27 +10,28 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { getMedinaLesson } from "../../data/books/medina/index";
+import { BottomTabs } from "../../components/BottomTabs";
 import { useProgress } from "../../context/ProgressContext";
+import { getMedinaLesson } from "../../data/books/medina/index";
 import { scale } from "../../styles";
 
-// Наша фирменная палитра
+
 const COLORS = {
-  background: "#F5F0E8", // Светло-бежевый фон
-  card: "#FFFFFF", // Белые карточки
-  accent: "#8D7456", // Мокка (коричневый)
-  textDark: "#1A1A1A", // Почти черный для текста
-  textMuted: "#8D7456", // Цвет мокка для второстепенного текста
-  divider: "#F0EAE1", // Очень светлый цвет для разделителей
+  background: "#F5F0E8",
+  card: "#FFFFFF",
+  accent: "#8D7456",
+  textDark: "#1A1A1A",
+  textMuted: "#8D7456",
+  divider: "#F0EAE1",
 };
 
 export default function LessonScreen() {
   const router = useRouter();
-  // Вытаскиваем lessonId
+
   const { lessonId } = useLocalSearchParams<{
     lessonId: string;
   }>();
-  
+
   const { setLastOpenedLessonId } = useProgress();
 
   useEffect(() => {
@@ -40,10 +40,8 @@ export default function LessonScreen() {
     }
   }, [lessonId]);
 
-  // Запрашиваем данные урока у нашего "Реестра"
   const lesson = getMedinaLesson(Number(lessonId));
 
-  // Защита: если урока нет в базе, показываем заглушку
   if (!lesson) {
     return (
       <SafeAreaView style={styles.errorContainer}>
@@ -64,24 +62,15 @@ export default function LessonScreen() {
     );
   }
 
-  // Рендер одной фразы или реплики из диалога
   const renderDialogueLine = ({ item }: { item: any }) => (
     <View style={styles.dialogueCard}>
-      {/* Имя говорящего (если это диалог, а не просто список слов) */}
-      {item.speaker && (
-        <View style={styles.speakerBadge}>
-          <Text style={styles.speakerText}>{item.speaker}</Text>
-        </View>
-      )}
-
-      {/* Арабский текст: Крупно, выровнено по правому краю (RTL) */}
       <Text style={styles.arabicText}>{item.ar}</Text>
 
-      {/* Разделительная линия, если есть перевод */}
-      {item.ru && <View style={styles.divider} />}
-
-      {/* Русский перевод: мельче, выровнено по левому краю */}
-      {item.ru && <Text style={styles.russianText}>{item.ru}</Text>}
+      {item.ru && (
+        <Text style={styles.russianText}>
+          {item.speaker ? `${item.speaker}: ` : ""}{item.ru}
+        </Text>
+      )}
     </View>
   );
 
@@ -89,7 +78,6 @@ export default function LessonScreen() {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
 
-      {/* Хедер */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
@@ -107,15 +95,13 @@ export default function LessonScreen() {
         <View style={styles.headerTextContainer}>
           <Text style={styles.headerTitle}>{lesson?.title}</Text>
           {lesson?.subtitle && (
-            <Text style={[styles.headerSubtitle, { marginTop: 4, color: COLORS.accent }]}>{lesson.subtitle}</Text>
+            <Text style={styles.headerSubtitle}>{lesson.subtitle}</Text>
           )}
         </View>
 
-        {/* Пустая вьюшка для идеального центрирования заголовка */}
         <View style={styles.backButtonPlaceholder} />
       </View>
 
-      {/* Список фраз/диалогов/упражнений */}
       <FlatList
         data={lesson?.dialogues || []}
         renderItem={renderDialogueLine}
@@ -130,6 +116,8 @@ export default function LessonScreen() {
           </View>
         }
       />
+
+      <BottomTabs />
     </SafeAreaView>
   );
 }
@@ -144,24 +132,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: scale(20),
-    paddingTop: scale(10),
-    paddingBottom: scale(20),
+    paddingTop: 50,
+    paddingBottom: scale(16),
+    borderBottomWidth: scale(1),
+    borderBottomColor: "#D9CFC4",
   },
   backButton: {
-    width: scale(40),
-    height: scale(40),
-    borderRadius: scale(20),
-    backgroundColor: COLORS.card,
+    width: scale(44),
+    height: scale(44),
+    borderRadius: scale(22),
+    backgroundColor: "#EAE1D6",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: scale(2) },
-    shadowOpacity: 0.1,
-    shadowRadius: scale(4),
-    elevation: 2,
   },
   backButtonPlaceholder: {
-    width: scale(40),
+    width: scale(44),
   },
   headerTextContainer: {
     flex: 1,
@@ -169,16 +154,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: scale(10),
   },
   headerSubtitle: {
-    fontSize: scale(14),
-    fontWeight: "600",
-    color: COLORS.accent,
-    textTransform: "uppercase",
-    marginBottom: scale(4),
+    fontSize: scale(12),
+    color: "#8A6D53",
+    marginTop: scale(2),
   },
   headerTitle: {
-    fontSize: scale(18),
+    fontSize: scale(16),
     fontWeight: "700",
-    color: COLORS.textDark,
+    color: "#3A2816",
     textAlign: "center",
   },
   listContent: {
@@ -223,10 +206,11 @@ const styles = StyleSheet.create({
     marginVertical: scale(16),
   },
   russianText: {
-    fontSize: scale(16),
-    lineHeight: scale(24),
-    color: COLORS.textMuted,
+    fontSize: scale(12),
+    color: "#73624E",
     textAlign: "left",
+    marginTop: scale(12),
+    fontFamily: "Roboto Flex",
   },
   errorContainer: {
     flex: 1,

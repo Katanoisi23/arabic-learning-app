@@ -1,4 +1,5 @@
 // app/index.tsx
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -12,9 +13,8 @@ import {
 import { BottomTabs } from "../components/BottomTabs";
 import { Header } from "../components/Header";
 import { ProgressCircle } from "../components/ProgressCircle";
-import { MEDINA_CHAPTERS, MEDINA_BOOK_1_LESSONS } from "../data/books/medina";
-import { Ionicons } from "@expo/vector-icons";
 import { useProgress } from "../context/ProgressContext";
+import { MEDINA_BOOK_1_LESSONS, MEDINA_CHAPTERS } from "../data/books/medina";
 import { styles } from "../styles";
 
 // массив книг
@@ -63,12 +63,8 @@ export default function BooksScreen() {
   const { completedLessons, lastOpenedLessonId } = useProgress();
 
   const totalChapters = MEDINA_CHAPTERS.length;
-  
-  // Находим самый дальний урок, который когда-либо открывал пользователь
   const maxLessonId = completedLessons.length > 0 ? Math.max(...completedLessons) : 1;
 
-  // Высчитываем прогресс на основе того, в какой главе находится этот самый дальний урок.
-  // Все предыдущие главы считаются пройденными.
   const currentChapterIndex = MEDINA_CHAPTERS.findIndex((c) =>
     c.lessonIds.includes(maxLessonId)
   );
@@ -79,7 +75,6 @@ export default function BooksScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Новый Header компонент */}
       <Header
         title="Книги"
         showSearch={true}
@@ -89,7 +84,6 @@ export default function BooksScreen() {
       />
 
       <View style={styles.root}>
-        {/* Контент со скроллом */}
         <ScrollView
           style={styles.scroll}
           contentContainerStyle={styles.scrollContent}
@@ -100,8 +94,7 @@ export default function BooksScreen() {
               <Text style={{ fontSize: 16, fontWeight: "700", color: "#3A2816", marginBottom: 8 }}>
                 Результаты поиска
               </Text>
-              
-              {/* Результаты по Главам */}
+
               {MEDINA_CHAPTERS.filter(
                 (c) =>
                   c.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
@@ -127,7 +120,6 @@ export default function BooksScreen() {
                 </TouchableOpacity>
               ))}
 
-              {/* Результаты по Урокам */}
               {MEDINA_BOOK_1_LESSONS.filter(
                 (l) =>
                   l.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
@@ -160,15 +152,14 @@ export default function BooksScreen() {
               ))}
 
               {MEDINA_CHAPTERS.filter((c) => c.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) || c.arabicTitle.toLowerCase().includes(searchQuery.trim().toLowerCase()) || c.description.toLowerCase().includes(searchQuery.trim().toLowerCase())).length === 0 &&
-               MEDINA_BOOK_1_LESSONS.filter((l) => l.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) || (l.subtitle && l.subtitle.toLowerCase().includes(searchQuery.trim().toLowerCase()))).length === 0 && (
-                <Text style={{ color: "#8A6D53", textAlign: "center", marginTop: 20 }}>
-                  Ничего не найдено
-                </Text>
-              )}
+                MEDINA_BOOK_1_LESSONS.filter((l) => l.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) || (l.subtitle && l.subtitle.toLowerCase().includes(searchQuery.trim().toLowerCase()))).length === 0 && (
+                  <Text style={{ color: "#8A6D53", textAlign: "center", marginTop: 20 }}>
+                    Ничего не найдено
+                  </Text>
+                )}
             </View>
           ) : (
             <>
-              {/* Карточка текущей книги */}
               <View style={styles.currentCard}>
                 <View style={styles.currentLeft}>
                   <Text style={styles.currentTitle}>Первая книга</Text>

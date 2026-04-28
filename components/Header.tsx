@@ -23,12 +23,10 @@ export function Header({
 }: HeaderProps) {
   return (
     <View style={styles.headerbar}>
-      {/* Хедер с заголовком */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>{title}</Text>
       </View>
 
-      {/* Поисковая строка (если нужна) */}
       {showSearch && (
         <View style={styles.searchRow}>
           <View style={styles.searchBox}>
@@ -49,7 +47,6 @@ export function Header({
   );
 }
 
-// Стили ТОЧНО как у вас
 const styles = StyleSheet.create({
   headerbar: {
     backgroundColor: "#FFFBF8",
@@ -76,7 +73,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F2E9E0",
-    borderRadius: 999, // "капсула" — оставляем максимальное скругление
+    borderRadius: 999,
     paddingHorizontal: scale(14),
     paddingVertical: scale(8),
     marginHorizontal: scale(14),

@@ -14,6 +14,7 @@ import {
 import { BottomTabs } from "../../components/BottomTabs";
 import { MEDINA_CHAPTERS } from "../../data/books/medina/chapters";
 import { getMedinaLesson } from "../../data/books/medina/index";
+import { scale } from "../../styles";
 
 // Цветовая палитра из промпта
 const COLORS = {
@@ -43,7 +44,7 @@ const LessonMenuItem = ({
     onPress={isLocked ? undefined : onPress}
   >
     <View style={styles.menuItemLeft}>
-      {isLocked && <Ionicons name="lock-closed-outline" size={20} color="#BDBDBD" />}
+      {isLocked && <Ionicons name="lock-closed-outline" size={scale(20)} color="#BDBDBD" />}
     </View>
     <View style={styles.menuItemRight}>
       <Text style={[styles.menuItemText, isLocked && styles.menuItemTextLocked]}>
@@ -51,7 +52,7 @@ const LessonMenuItem = ({
       </Text>
       <Ionicons
         name={icon}
-        size={20}
+        size={scale(20)}
         color={isLocked ? "#BDBDBD" : COLORS.accent}
         style={styles.menuItemIcon}
       />
@@ -84,7 +85,7 @@ export default function ChapterDetailScreen() {
       <StatusBar barStyle="dark-content" backgroundColor="#FFFBF8" />
 
       {/* Top Navigation & Center Text */}
-      <SafeAreaView style={styles.headerSafeArea}>
+      <View style={styles.headerSafeArea}>
         <View style={styles.header}>
           {/* Маленькая круглая кнопка назад слева */}
           <TouchableOpacity
@@ -97,7 +98,7 @@ export default function ChapterDetailScreen() {
               }
             }}
           >
-            <Ionicons name="chevron-back" size={24} color="#8A6D53" />
+            <Ionicons name="chevron-back" size={scale(24)} color="#8A6D53" />
           </TouchableOpacity>
 
           {/* Текст по центру */}
@@ -106,8 +107,11 @@ export default function ChapterDetailScreen() {
             <Text style={styles.headerArabic}>{chapter.arabicTitle}</Text>
             <Text style={styles.headerSubtitle}>{chapter.description}</Text>
           </View>
+
+          {/* Пустышка для центрирования */}
+          <View style={styles.backButtonPlaceholder} />
         </View>
-      </SafeAreaView>
+      </View>
 
       <SafeAreaView style={styles.safeArea}>
         {/* Content Cards */}
@@ -160,110 +164,111 @@ const styles = StyleSheet.create({
   },
   headerSafeArea: {
     backgroundColor: "#FFFBF8",
-    borderBottomWidth: 1,
+    borderBottomWidth: scale(1),
     borderBottomColor: "#D9CFC4",
   },
   safeArea: {
     flex: 1,
   },
   header: {
-    paddingTop: 10,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-    position: "relative",
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: scale(20),
+    paddingTop: 50,
+    paddingBottom: scale(16),
   },
   backButton: {
-    position: "absolute",
-    left: 20,
-    top: 10,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: scale(44),
+    height: scale(44),
+    borderRadius: scale(22),
     backgroundColor: "#EAE1D6",
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 10,
+  },
+  backButtonPlaceholder: {
+    width: scale(44),
   },
   headerTextContainer: {
+    flex: 1,
     alignItems: "center",
   },
   headerTitle: {
-    fontSize: 15,
+    fontSize: scale(15),
     fontWeight: "800",
     color: "#3A2816",
-    marginBottom: 2,
+    marginBottom: scale(2),
   },
   headerArabic: {
-    fontSize: 34,
+    fontSize: scale(34),
     color: "#3A2816",
     fontWeight: "500",
-    marginBottom: 4,
+    marginBottom: scale(4),
   },
   headerSubtitle: {
-    fontSize: 12,
+    fontSize: scale(12),
     color: "#8A6D53",
   },
   listContent: {
-    paddingTop: 20,
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingTop: scale(20),
+    paddingHorizontal: scale(20),
+    paddingBottom: scale(20),
   },
   cardContainer: {
     backgroundColor: COLORS.card,
-    borderRadius: 24,
-    padding: 20,
-    marginBottom: 20,
+    borderRadius: scale(24),
+    padding: scale(20),
+    marginBottom: scale(20),
     position: "relative",
   },
   lessonNumberCircle: {
     position: "absolute",
-    top: 24,
-    right: 24,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    top: scale(24),
+    right: scale(24),
+    width: scale(40),
+    height: scale(40),
+    borderRadius: scale(20),
     backgroundColor: "#EBE2D8",
     alignItems: "center",
     justifyContent: "center",
   },
   lessonNumberText: {
-    fontSize: 20,
+    fontSize: scale(20),
     fontWeight: "800",
     color: "#3A2816",
   },
   cardHeaderArea: {
-    paddingRight: 60,
+    paddingRight: scale(60),
     alignItems: "flex-end", // All text in header aligns to right
-    marginBottom: 14,
+    marginBottom: scale(14),
   },
   cardArabicTitle: {
-    fontSize: 32,
+    fontSize: scale(32),
     color: "#3A2816",
     fontWeight: "600",
     textAlign: "right",
   },
   cardSubtitle: {
-    fontSize: 14,
+    fontSize: scale(14),
     color: "#8A6D53",
     fontWeight: "600",
     textAlign: "right",
-    marginTop: 4,
+    marginTop: scale(4),
   },
   menuContainer: {
-    gap: 8,
+    gap: scale(8),
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#F2EAE0",
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    borderRadius: 12,
+    paddingVertical: scale(14),
+    paddingHorizontal: scale(16),
+    borderRadius: scale(12),
   },
   menuItemLeft: {
-    width: 30,
+    width: scale(30),
     alignItems: "flex-start",
   },
   menuItemRight: {
@@ -273,7 +278,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   menuItemText: {
-    fontSize: 16,
+    fontSize: scale(16),
     fontWeight: "700",
     color: "#423325",
   },
@@ -281,7 +286,6 @@ const styles = StyleSheet.create({
     color: "#BDBDBD",
   },
   menuItemIcon: {
-    marginLeft: 12,
+    marginLeft: scale(12),
   },
-
 });
