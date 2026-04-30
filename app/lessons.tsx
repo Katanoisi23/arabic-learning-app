@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     width: scale(50),
     height: scale(50),
     borderRadius: scale(12),
-    backgroundColor: "#E6DBD0",
+    backgroundColor: "#F2E9E0",
     alignItems: "center",
     justifyContent: "center",
     marginRight: scale(16),
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   chapterNumberText: {
     fontSize: scale(24),
     fontWeight: "700",
-    color: "#333",
+    color: "#3A2816",
   },
   chapterInfo: {
     flex: 1,
