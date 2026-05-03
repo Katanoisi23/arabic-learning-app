@@ -90,7 +90,7 @@ export default function LessonsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#EFE6DC",
+    backgroundColor: "#F2E9E0",
   },
   contentContainer: {
     flex: 1,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   chapterCard: {
     flexDirection: "row",
     alignItems: "flex-start",
-    backgroundColor: "#F6EFE8",
+    backgroundColor: "#FFFBF8",
     borderRadius: scale(16),
     padding: scale(16),
     marginBottom: scale(12),
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   chapterArabic: {
     fontSize: scale(16),
-    color: "#B89B7D",
+    color: "#000000ff",
     marginBottom: scale(8),
     textAlign: "right",
     fontWeight: "500",
