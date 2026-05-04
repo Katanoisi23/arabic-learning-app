@@ -13,6 +13,7 @@ import {
 import { BottomTabs } from "../../components/BottomTabs";
 import { useProgress } from "../../context/ProgressContext";
 import { getMedinaLesson } from "../../data/books/medina/index";
+import { MEDINA_CHAPTERS } from "../../data/books/medina/chapters";
 import { scale } from "../../styles";
 
 
@@ -20,8 +21,8 @@ const COLORS = {
   background: "#F5F0E8",
   card: "#FFFFFF",
   accent: "#8D7456",
-  textDark: "#1A1A1A",
-  textMuted: "#8D7456",
+  textDark: "#3A2816",
+  textMuted: "#9E8B7A",
   divider: "#F0EAE1",
 };
 
@@ -36,7 +37,8 @@ export default function LessonScreen() {
 
   useEffect(() => {
     if (lessonId) {
-      setLastOpenedLessonId(Number(lessonId));
+      const id = Array.isArray(lessonId) ? lessonId[0] : lessonId;
+      setLastOpenedLessonId(Number(id));
     }
   }, [lessonId]);
 
@@ -93,7 +95,17 @@ export default function LessonScreen() {
         </TouchableOpacity>
 
         <View style={styles.headerTextContainer}>
-          <Text style={styles.headerTitle}>{lesson?.title}</Text>
+          <Text style={styles.headerTitle}>
+            {(() => {
+              if (!lesson) return "";
+              const chapter = MEDINA_CHAPTERS.find(c => c.lessonIds.includes(lesson.id));
+              if (chapter) {
+                const index = chapter.lessonIds.indexOf(lesson.id);
+                return `Урок ${index + 1}`;
+              }
+              return lesson.title;
+            })()}
+          </Text>
           {lesson?.subtitle && (
             <Text style={styles.headerSubtitle}>{lesson.subtitle}</Text>
           )}
@@ -165,6 +177,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   listContent: {
+    paddingTop: scale(24),
     paddingHorizontal: scale(20),
     paddingBottom: scale(40),
   },
@@ -207,7 +220,7 @@ const styles = StyleSheet.create({
   },
   russianText: {
     fontSize: scale(12),
-    color: "#73624E",
+    color: COLORS.textMuted,
     textAlign: "left",
     marginTop: scale(12),
     fontFamily: "Roboto Flex",

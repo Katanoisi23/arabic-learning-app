@@ -16,8 +16,8 @@ const COLORS = {
   background: "#F5F0E8",
   card: "#FFFFFF",
   accent: "#8D7456",
-  textDark: "#1A1A1A",
-  textMuted: "#8D7456",
+  textDark: "#3A2816",
+  textMuted: "#9E8B7A",
   divider: "#F0EAE1",
 };
 

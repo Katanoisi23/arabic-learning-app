@@ -46,10 +46,14 @@ export default function LessonsScreen() {
       </View>
 
       <View style={styles.chapterInfo}>
-        <Text style={styles.chapterTitle}>{item.title}</Text>
-        <Text style={styles.chapterDescription}>{item.description}</Text>
-        <Text style={styles.chapterArabic}>{item.arabicTitle}</Text>
-        <Text style={styles.lessonsCount}>{item.lessonIds.length} урока</Text>
+        <View style={styles.chapterInfoLeft}>
+          <Text style={styles.chapterTitle} numberOfLines={1}>{item.title}</Text>
+          <Text style={styles.chapterDescription} numberOfLines={1}>{item.description}</Text>
+        </View>
+        <View style={styles.chapterInfoRight}>
+          <Text style={styles.chapterArabic}>{item.arabicTitle}</Text>
+          <Text style={styles.lessonsCount}>{item.lessonIds.length} урока</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -90,7 +94,7 @@ export default function LessonsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#F2E9E0",
+    backgroundColor: "#F5F0E8",
   },
   contentContainer: {
     flex: 1,
@@ -102,8 +106,8 @@ const styles = StyleSheet.create({
   },
   chapterCard: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    backgroundColor: "#FFFBF8",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
     borderRadius: scale(16),
     padding: scale(16),
     marginBottom: scale(12),
@@ -112,11 +116,10 @@ const styles = StyleSheet.create({
     width: scale(50),
     height: scale(50),
     borderRadius: scale(12),
-    backgroundColor: "#F2E9E0",
+    backgroundColor: "#EBE2D8",
     alignItems: "center",
     justifyContent: "center",
     marginRight: scale(16),
-    marginTop: scale(4),
   },
   chapterNumberText: {
     fontSize: scale(24),
@@ -125,6 +128,17 @@ const styles = StyleSheet.create({
   },
   chapterInfo: {
     flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  chapterInfoLeft: {
+    flex: 1,
+    paddingRight: scale(10),
+  },
+  chapterInfoRight: {
+    alignItems: "flex-end",
+    justifyContent: "center",
   },
   chapterTitle: {
     fontSize: scale(14),
@@ -134,21 +148,20 @@ const styles = StyleSheet.create({
   },
   chapterDescription: {
     fontSize: scale(12),
-    color: "#73624E",
+    color: "#9E8B7A",
     fontFamily: "Roboto Flex",
-    marginBottom: scale(8),
     lineHeight: scale(18),
   },
   chapterArabic: {
     fontSize: scale(16),
     color: "#000000ff",
-    marginBottom: scale(8),
+    marginBottom: scale(4),
     textAlign: "right",
     fontWeight: "500",
   },
   lessonsCount: {
     fontSize: scale(9),
-    color: "#73624E",
+    color: "#9E8B7A",
     fontFamily: "Roboto Flex",
     textAlign: "right",
   },
@@ -159,7 +172,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: scale(18),
-    color: "#888",
+    color: "#9E8B7A",
     marginTop: scale(16),
   },
 });

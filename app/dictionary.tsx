@@ -1,122 +1,117 @@
-// app/dictionary.tsx
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    Dimensions,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { BottomTabs } from "../components/BottomTabs";
 import { Header } from "../components/Header";
+import { DICT_PAIRS } from "../data/dictionary";
+import { useProgress } from "../context/ProgressContext";
 
 const { width } = Dimensions.get("window");
 const guidelineBaseWidth = 375;
 const scale = (size: number) => (width / guidelineBaseWidth) * size;
 
-// ====== данные словаря (Урок 1) ======
-const DICT_PAIRS = [
-  { id: "1", meaning: "это, этот", arabic: "هَذَا" },
-  { id: "2", meaning: "дом", arabic: "بَيْتٌ (بُيُوتٌ)" },
-  { id: "3", meaning: "школа", arabic: "مَدْرَسَةٌ (مَدَارِسُ)" },
-  { id: "4", meaning: "дверь", arabic: "بَابٌ (أَبْوَابٌ)" },
-  { id: "5", meaning: "книга", arabic: "كِتَابٌ (كُتُبٌ)" },
-  { id: "6", meaning: "ручка", arabic: "قَلَمٌ (أَقْلَامٌ)" },
-  { id: "7", meaning: "ключ", arabic: "مِفْتَاحٌ (مَفَاتِيحُ)" },
-  { id: "8", meaning: "парта", arabic: "مَكْتَبٌ (مَكَاتِبُ)" },
-  { id: "9", meaning: "кровать", arabic: "سَرِيرٌ (سُرُرٌ)" },
-  { id: "10", meaning: "стул", arabic: "كُرْسِيٌّ (كَرَاسِيُ)" },
-  { id: "11", meaning: "Что?", arabic: "مَا؟" },
-  { id: "12", meaning: "Вопрос, предлог", arabic: "أَ؟" },
-  { id: "13", meaning: "да", arabic: "نَعَمْ" },
-  { id: "14", meaning: "нет", arabic: "لَا" },
-  { id: "15", meaning: "рубашка", arabic: "قَمِيصٌ (قُمْصَانٌ)" },
-  { id: "16", meaning: "звезда", arabic: "نَجْمٌ (نُجُومٌ)" },
-  { id: "17", meaning: "мечеть", arabic: "مَسْجِدٌ (مَسَاجِدُ)" },
-  { id: "18", meaning: "Кто?", arabic: "مَنْ؟" },
-  { id: "19", meaning: "врач", arabic: "طَبِيبٌ (أَطِبَّاءُ)" },
-  { id: "20", meaning: "ребенок", arabic: "وَلَدٌ (أَوْلَادٌ)" },
-  { id: "21", meaning: "студент", arabic: "طَالِبٌ (طُلَّابٌ)" },
-  { id: "22", meaning: "мужчина", arabic: "رَجُلٌ (رِجَالٌ)" },
-  { id: "23", meaning: "торговец", arabic: "تَاجِرٌ (تُجَّارٌ)" },
-  { id: "24", meaning: "собака", arabic: "كَلْبٌ (كِلَابٌ)" },
-  { id: "25", meaning: "кошка", arabic: "قِطٌّ (قِطَطٌ)" },
-  { id: "26", meaning: "осел", arabic: "حِمَارٌ (حُمُرٌ)" },
-  { id: "27", meaning: "конь", arabic: "حِصَانٌ (حُصُنٌ)" },
-  { id: "28", meaning: "верблюд", arabic: "جَمَلٌ (جِمَالٌ)" },
-  { id: "29", meaning: "петух", arabic: "دِيكٌ (دِيَكَةٌ)" },
-  { id: "30", meaning: "учитель", arabic: "مُدَرِّسٌ (مُدَرِّسُونَ)" },
-  { id: "31", meaning: "салфетка", arabic: "مِنْدِيلٌ (مَنَادِيلُ)" },
-];
-
 export default function DictionaryScreen() {
   const [query, setQuery] = useState("");
   const router = useRouter();
+  const { completedLessons } = useProgress();
 
-  const filtered = DICT_PAIRS.filter((item) => {
+  const availableWords = DICT_PAIRS.filter(word => completedLessons.map(Number).includes(Number(word.lessonId)));
+
+  const filtered = availableWords.filter((item) => {
     const q = query.trim().toLowerCase();
     if (!q) return true;
     return (
       item.meaning.toLowerCase().includes(q) ||
-      item.arabic.toLowerCase().includes(q)
+      item.singular.toLowerCase().includes(q) ||
+      item.plural.toLowerCase().includes(q)
     );
   });
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Шапка */}
       <Header
         title="Словарь"
-        showSearch={true}
+        showSearch={completedLessons.length > 0}
         searchPlaceholder="Поиск"
         searchValue={query}
         onSearchChange={setQuery}
       />
 
-      {/* Подзаголовок "Все слова из урока" */}
-      <View style={styles.subtitleContainer}>
-        <Text style={styles.headerSubtitle}>Все слова из урока</Text>
-      </View>
+      {completedLessons.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>Сначала пройдите хотя бы одну главу</Text>
+        </View>
+      ) : (
+        <>
+          <View style={styles.subtitleContainer}>
+            <Text style={styles.headerSubtitle}>Все слова из пройденных уроков</Text>
+          </View>
 
-      {/* Контент */}
-      <View style={styles.root}>
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          {filtered.map((item) => (
-            <View key={item.id} style={styles.card}>
-              <Text style={styles.arabic}>{item.arabic}</Text>
-              <Text style={styles.meaning}>{item.meaning}</Text>
+          <View style={styles.root}>
+            {/* Заголовок таблицы */}
+            <View style={styles.tableHeader}>
+              <View style={[styles.headerCell, { flex: 1.2 }]}>
+                <Text style={styles.headerText}>Слово</Text>
+              </View>
+              <View style={[styles.headerCell, { flex: 1.5 }]}>
+                <Text style={styles.headerText}>Мн.число</Text>
+              </View>
+              <View style={[styles.headerCell, { flex: 1.5 }]}>
+                <Text style={styles.headerText}>Ед.число</Text>
+              </View>
             </View>
-          ))}
 
-          <View style={{ height: scale(16) }} />
-        </ScrollView>
-      </View>
+            <ScrollView
+              style={styles.scroll}
+              contentContainerStyle={styles.scrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              {filtered.map((item) => (
+                <View key={item.id} style={styles.tableRow}>
+                  <View style={[styles.dataCell, { flex: 1.2 }]}>
+                    <Text style={styles.dataTextRu}>{item.meaning}</Text>
+                  </View>
+                  <View style={[styles.dataCell, { flex: 1.5 }]}>
+                    <Text style={styles.dataTextAr}>{item.plural}</Text>
+                  </View>
+                  <View style={[styles.dataCell, { flex: 1.5 }]}>
+                    <Text style={styles.dataTextAr}>{item.singular}</Text>
+                  </View>
+                </View>
+              ))}
 
-      {/* Кнопка "На тренировку" */}
-      <TouchableOpacity
-        style={styles.trainingButton}
-        onPress={() => router.push("../book/./training")}
-      >
-        <Text style={styles.trainingButtonText}>На тренировку</Text>
-      </TouchableOpacity>
+              <View style={{ height: scale(16) }} />
+            </ScrollView>
+          </View>
+
+          <TouchableOpacity
+            style={styles.trainingButton}
+            onPress={() => router.push("../book/./training")}
+          >
+            <Ionicons name="stopwatch" size={scale(20)} color="#FFFFFF" style={{ marginRight: scale(8) }} />
+            <Text style={styles.trainingButtonText}>На тренировку</Text>
+          </TouchableOpacity>
+        </>
+      )}
 
       <BottomTabs />
     </SafeAreaView>
   );
 }
 
-// ====== Стили ======
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#FFFBF8",
+    backgroundColor: "#F5F0E8",
   },
   subtitleContainer: {
     alignItems: "center",
@@ -129,46 +124,89 @@ const styles = StyleSheet.create({
   },
   root: {
     flex: 1,
-    backgroundColor: "#F5E9DC",
+    backgroundColor: "#F5F0E8",
     paddingHorizontal: scale(16),
+  },
+  tableHeader: {
+    flexDirection: "row",
+    paddingHorizontal: scale(4), // to align with inner cells of the white container
+    marginBottom: scale(8),
+    gap: scale(4),
+  },
+  headerCell: {
+    backgroundColor: "#8D7456",
+    paddingVertical: scale(10),
+    paddingHorizontal: scale(4),
+    borderRadius: scale(6),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerText: {
+    color: "#FFFFFF",
+    fontSize: scale(12),
+    fontWeight: "600",
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    paddingTop: scale(8),
     paddingBottom: scale(16),
   },
-  card: {
-    backgroundColor: "#FFFBF8",
-    borderRadius: scale(12),
-    paddingVertical: scale(10),
-    paddingHorizontal: scale(14),
-    marginBottom: scale(10),
+  tableRow: {
+    flexDirection: "row",
+    backgroundColor: "#FFFFFF",
+    borderRadius: scale(8),
+    padding: scale(4),
+    marginBottom: scale(8),
+    gap: scale(4),
   },
-  arabic: {
-    fontSize: scale(16),
-    fontWeight: "600",
+  dataCell: {
+    backgroundColor: "#F2EAE0",
+    borderRadius: scale(6),
+    paddingVertical: scale(14),
+    paddingHorizontal: scale(4),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dataTextRu: {
     color: "#3A2816",
-    textAlign: "right",
+    fontSize: scale(12),
+    fontWeight: "600",
+    textAlign: "center",
   },
-  meaning: {
-    fontSize: scale(13),
-    color: "#73624E",
-    marginTop: scale(4),
+  dataTextAr: {
+    color: "#3A2816",
+    fontSize: scale(16),
+    fontWeight: "500",
+    textAlign: "center",
   },
   trainingButton: {
-    backgroundColor: "#7B5E3F",
-    paddingVertical: scale(12),
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#8D7456",
+    paddingVertical: scale(14),
     paddingHorizontal: scale(16),
     borderRadius: scale(8),
     marginHorizontal: scale(16),
     marginBottom: scale(16),
-    alignItems: "center",
+    marginTop: scale(16),
   },
   trainingButtonText: {
     color: "#FFFFFF",
     fontSize: scale(16),
-    fontWeight: "600",
+    fontWeight: "700",
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: scale(32),
+  },
+  emptyText: {
+    fontSize: scale(16),
+    color: "#8A6D53",
+    textAlign: "center",
+    lineHeight: scale(24),
   },
 });
