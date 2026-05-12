@@ -103,7 +103,7 @@ export default function TrainingScreen() {
         {WORDS.length === 0 ? (
           <View style={[styles.card, { padding: scale(20) }]}>
             <Text style={[styles.cardText, { fontSize: scale(18), textAlign: 'center', color: '#8D7456' }]}>
-              Пройдите хотя бы один урок, чтобы начать тренировку слов
+              Пройдите хотя бы одно упражнение, чтобы начать тренировку слов
             </Text>
           </View>
         ) : (

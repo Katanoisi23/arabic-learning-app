@@ -8,6 +8,7 @@ const { width } = Dimensions.get("window");
 const guidelineBaseWidth = 375;
 const scale = (size: number) => (width / guidelineBaseWidth) * size;
 
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BookIcon, DictionaryIcon, SettingsIcon } from "./Icons";
 
 const TABS = [
@@ -31,9 +32,13 @@ const TABS = [
 export function BottomTabs() {
   const router = useRouter();
   const pathname = usePathname();
+  const insets = useSafeAreaInsets();
+
+  // Ensure minimum padding of scale(18) or whatever the inset requires
+  const bottomPadding = Math.max(scale(18), insets.bottom);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: bottomPadding }]}>
       {TABS.map((tab) => {
         const isActive = pathname === tab.route;
 

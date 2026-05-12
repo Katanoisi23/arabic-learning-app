@@ -53,7 +53,7 @@ export default function DictionaryScreen() {
       ) : (
         <>
           <View style={styles.subtitleContainer}>
-            <Text style={styles.headerSubtitle}>Все слова из пройденных уроков</Text>
+            <Text style={styles.headerSubtitle}>Все слова из пройденных упражнений</Text>
           </View>
 
           <View style={styles.root}>

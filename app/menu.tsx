@@ -30,7 +30,7 @@ export default function LessonScreen() {
   if (!lesson) {
     return (
       <SafeAreaView style={styles.errorContainer}>
-        <Text style={styles.errorText}>Урок #{lessonId} не найден</Text>
+        <Text style={styles.errorText}>Упражнение #{lessonId} не найдено</Text>
         <TouchableOpacity
           style={styles.errorButton}
           onPress={() => {
@@ -95,7 +95,7 @@ export default function LessonScreen() {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              Контент для этого урока еще не добавлен.
+              Контент для этого упражнения еще не добавлен.
             </Text>
           </View>
         }

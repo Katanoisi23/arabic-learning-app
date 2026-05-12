@@ -47,7 +47,7 @@ export default function LessonScreen() {
   if (!lesson) {
     return (
       <SafeAreaView style={styles.errorContainer}>
-        <Text style={styles.errorText}>Урок #{lessonId} не найден</Text>
+        <Text style={styles.errorText}>Упражнение #{lessonId} не найдено</Text>
         <TouchableOpacity
           style={styles.errorButton}
           onPress={() => {
@@ -101,7 +101,7 @@ export default function LessonScreen() {
               const chapter = MEDINA_CHAPTERS.find(c => c.lessonIds.includes(lesson.id));
               if (chapter) {
                 const index = chapter.lessonIds.indexOf(lesson.id);
-                return `Урок ${index + 1}`;
+                return `Упражнение ${index + 1}`;
               }
               return lesson.title;
             })()}
@@ -123,7 +123,7 @@ export default function LessonScreen() {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
-              Контент для этого урока еще не добавлен.
+              Контент для этого упражнения еще не добавлен.
             </Text>
           </View>
         }

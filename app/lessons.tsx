@@ -52,7 +52,7 @@ export default function LessonsScreen() {
         </View>
         <View style={styles.chapterInfoRight}>
           <Text style={styles.chapterArabic}>{item.arabicTitle}</Text>
-          <Text style={styles.lessonsCount}>{item.lessonIds.length} урока</Text>
+          <Text style={styles.lessonsCount}>{item.lessonIds.length} упражнений</Text>
         </View>
       </View>
     </TouchableOpacity>
