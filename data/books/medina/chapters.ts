@@ -8,7 +8,7 @@ export type Chapter = {
   lessonIds: number[]
 }
 
-export const MEDINA_CHAPTERS: Chapter[] = [
+export const MEDINA_BOOK_1_CHAPTERS: Chapter[] = [
   {
     id: 1,
     title: "Указательные местоимения",

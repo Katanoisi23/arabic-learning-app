@@ -14,7 +14,7 @@ import { BottomTabs } from "../components/BottomTabs";
 import { Header } from "../components/Header";
 import { ProgressCircle } from "../components/ProgressCircle";
 import { useProgress } from "../context/ProgressContext";
-import { MEDINA_BOOK_1_LESSONS, MEDINA_CHAPTERS } from "../data/books/medina";
+import { MEDINA_BOOK_1_LESSONS, MEDINA_BOOK_1_CHAPTERS } from "../data/books/medina";
 import { styles } from "../styles";
 
 // массив книг
@@ -62,10 +62,10 @@ export default function BooksScreen() {
   const [searchQuery, setSearchQuery] = useState("");
   const { completedLessons, lastOpenedLessonId } = useProgress();
 
-  const totalChapters = MEDINA_CHAPTERS.length;
+  const totalChapters = MEDINA_BOOK_1_CHAPTERS.length;
   const maxLessonId = completedLessons.length > 0 ? Math.max(...completedLessons) : 1;
 
-  const currentChapterIndex = MEDINA_CHAPTERS.findIndex((c) =>
+  const currentChapterIndex = MEDINA_BOOK_1_CHAPTERS.findIndex((c) =>
     c.lessonIds.includes(maxLessonId)
   );
   const completedChaptersCount = currentChapterIndex >= 0 ? currentChapterIndex : 0;
@@ -95,7 +95,7 @@ export default function BooksScreen() {
                 Результаты поиска
               </Text>
 
-              {MEDINA_CHAPTERS.filter(
+              {MEDINA_BOOK_1_CHAPTERS.filter(
                 (c) =>
                   c.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
                   c.arabicTitle.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
@@ -151,7 +151,7 @@ export default function BooksScreen() {
                 </TouchableOpacity>
               ))}
 
-              {MEDINA_CHAPTERS.filter((c) => c.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) || c.arabicTitle.toLowerCase().includes(searchQuery.trim().toLowerCase()) || c.description.toLowerCase().includes(searchQuery.trim().toLowerCase())).length === 0 &&
+              {MEDINA_BOOK_1_CHAPTERS.filter((c) => c.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) || c.arabicTitle.toLowerCase().includes(searchQuery.trim().toLowerCase()) || c.description.toLowerCase().includes(searchQuery.trim().toLowerCase())).length === 0 &&
                 MEDINA_BOOK_1_LESSONS.filter((l) => l.title.toLowerCase().includes(searchQuery.trim().toLowerCase()) || (l.subtitle && l.subtitle.toLowerCase().includes(searchQuery.trim().toLowerCase()))).length === 0 && (
                   <Text style={{ color: "#8A6D53", textAlign: "center", marginTop: 20 }}>
                     Ничего не найдено

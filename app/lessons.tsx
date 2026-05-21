@@ -12,7 +12,8 @@ import {
 } from "react-native";
 import { BottomTabs } from "../components/BottomTabs";
 import { Header } from "../components/Header";
-import { Chapter, MEDINA_CHAPTERS } from "../data/books/medina/chapters";
+import { Chapter } from "../data/books/medina/chapters";
+import { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS } from "../data/books/medina/index";
 import { scale } from "../styles";
 
 export default function LessonsScreen() {
@@ -20,7 +21,11 @@ export default function LessonsScreen() {
   const { bookId } = useLocalSearchParams<{ bookId?: string }>();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredChapters = MEDINA_CHAPTERS.filter(
+  const isBook2 = bookId === "2";
+  const chaptersData = isBook2 ? MEDINA_BOOK_2_CHAPTERS : MEDINA_BOOK_1_CHAPTERS;
+  const bookTitle = isBook2 ? "Книга вторая" : "Книга первая";
+
+  const filteredChapters = chaptersData.filter(
     (chapter) =>
       chapter.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       chapter.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -62,10 +67,10 @@ export default function LessonsScreen() {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#EFE6DC" />
 
-      <Header
-        title={`Том ${bookId || "1"}`}
+      <Header 
+        title={bookTitle}
         showSearch={true}
-        searchPlaceholder="Поиск"
+        searchPlaceholder="Поиск главы"
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
       />

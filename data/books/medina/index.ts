@@ -1,4 +1,5 @@
-import { MEDINA_CHAPTERS } from "./chapters"
+import { MEDINA_BOOK_1_CHAPTERS } from "./chapters"
+import { MEDINA_BOOK_2_CHAPTERS } from "./chapters_book2"
 import { MEDINA_BOOK_1_LESSONS } from "./medina_book_1"
 import { MEDINA_BOOK_2_LESSONS } from "./medina_book_2"
 
@@ -8,4 +9,4 @@ export function getMedinaLesson(id: number) {
          null;
 }
 
-export { MEDINA_CHAPTERS, MEDINA_BOOK_1_LESSONS, MEDINA_BOOK_2_LESSONS }
+export { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS, MEDINA_BOOK_1_LESSONS, MEDINA_BOOK_2_LESSONS }
