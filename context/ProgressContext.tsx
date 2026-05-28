@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
-import { MEDINA_CHAPTERS } from "../data/books/medina/index";
+import { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS } from "../data/books/medina/index";
 
 const { width } = Dimensions.get("window");
 const guidelineBaseWidth = 375;
@@ -75,21 +75,38 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       if (prev.includes(id)) return prev;
       const next = [...prev, id];
       SecureStore.setItemAsync("completedLessons", JSON.stringify(next)).catch(() => { });
-
-      const completedChapter = MEDINA_CHAPTERS.find((chapter) => {
-        if (!chapter.lessonIds.includes(id)) return false;
-        const allCompleted = chapter.lessonIds.every(lessonId => next.includes(lessonId));
-        const wasAlreadyCompleted = chapter.lessonIds.every(lessonId => prev.includes(lessonId));
-        return allCompleted && !wasAlreadyCompleted;
-      });
-
-      if (completedChapter) {
-        showToast("Словарь обновлен");
-      }
-
       return next;
     });
   };
+
+  // Determine newly completed chapters to show toast, without putting side-effects in state updaters
+  const prevCompletedRef = useRef<number[]>([]);
+  useEffect(() => {
+    if (!isLoaded || completedLessons.length === 0) return;
+    if (prevCompletedRef.current.length === 0) {
+      prevCompletedRef.current = completedLessons;
+      return;
+    }
+
+    const allChapters = [...(MEDINA_BOOK_1_CHAPTERS || []), ...(MEDINA_BOOK_2_CHAPTERS || [])];
+    let justCompleted = false;
+
+    for (const chapter of allChapters) {
+      if (!chapter || !chapter.lessonIds || chapter.lessonIds.length === 0) continue;
+      const allCompletedNow = chapter.lessonIds.every(id => completedLessons.includes(id));
+      const allCompletedBefore = chapter.lessonIds.every(id => prevCompletedRef.current.includes(id));
+      if (allCompletedNow && !allCompletedBefore) {
+        justCompleted = true;
+        break;
+      }
+    }
+
+    if (justCompleted) {
+      showToast("Словарь обновлен");
+    }
+
+    prevCompletedRef.current = completedLessons;
+  }, [completedLessons, isLoaded]);
 
   return (
     <ProgressContext.Provider value={{ lastOpenedLessonId, setLastOpenedLessonId, completedLessons }}>

@@ -12,8 +12,7 @@ import {
 } from "react-native";
 import { BottomTabs } from "../../components/BottomTabs";
 import { useProgress } from "../../context/ProgressContext";
-import { getMedinaLesson } from "../../data/books/medina/index";
-import { MEDINA_CHAPTERS } from "../../data/books/medina/chapters";
+import { getMedinaLesson, MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS } from "../../data/books/medina/index";
 import { scale } from "../../styles";
 
 
@@ -35,12 +34,13 @@ export default function LessonScreen() {
 
   const { setLastOpenedLessonId } = useProgress();
 
+  const idStr = Array.isArray(lessonId) ? lessonId[0] : lessonId;
+
   useEffect(() => {
-    if (lessonId) {
-      const id = Array.isArray(lessonId) ? lessonId[0] : lessonId;
-      setLastOpenedLessonId(Number(id));
+    if (idStr) {
+      setLastOpenedLessonId(Number(idStr));
     }
-  }, [lessonId]);
+  }, [idStr]);
 
   const lesson = getMedinaLesson(Number(lessonId));
 
@@ -98,7 +98,8 @@ export default function LessonScreen() {
           <Text style={styles.headerTitle}>
             {(() => {
               if (!lesson) return "";
-              const chapter = MEDINA_CHAPTERS.find(c => c.lessonIds.includes(lesson.id));
+              const allChapters = [...(MEDINA_BOOK_1_CHAPTERS || []), ...(MEDINA_BOOK_2_CHAPTERS || [])];
+              const chapter = allChapters.find(c => c?.lessonIds?.includes(lesson.id));
               if (chapter) {
                 const index = chapter.lessonIds.indexOf(lesson.id);
                 return `Упражнение ${index + 1}`;
