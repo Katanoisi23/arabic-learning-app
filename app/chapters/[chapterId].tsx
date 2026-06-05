@@ -11,7 +11,7 @@ import {
   View
 } from "react-native";
 import { BottomTabs } from "../../components/BottomTabs";
-import { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS } from "../../data/books/medina/index";
+import { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS, MEDINA_BOOK_3_CHAPTERS, MEDINA_BOOK_4_CHAPTERS } from "../../data/books/medina/index";
 import { getMedinaLesson } from "../../data/books/medina/index";
 import { scale } from "../../styles";
 
@@ -84,8 +84,14 @@ export default function ChapterDetailScreen() {
 
   if (!chapterId) return <Redirect href="/book/training" />;
 
-  const isBook2 = bookId === "2";
-  const chaptersData = isBook2 ? MEDINA_BOOK_2_CHAPTERS : MEDINA_BOOK_1_CHAPTERS;
+  let chaptersData = MEDINA_BOOK_1_CHAPTERS;
+  if (bookId === "2") {
+    chaptersData = MEDINA_BOOK_2_CHAPTERS;
+  } else if (bookId === "3") {
+    chaptersData = MEDINA_BOOK_3_CHAPTERS;
+  } else if (bookId === "4") {
+    chaptersData = MEDINA_BOOK_4_CHAPTERS;
+  }
 
   const chapter = chaptersData.find((c) => c.id === Number(chapterId));
   if (!chapter) return <Redirect href="/book/training" />;

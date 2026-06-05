@@ -13,7 +13,7 @@ import {
 import { BottomTabs } from "../components/BottomTabs";
 import { Header } from "../components/Header";
 import { Chapter } from "../data/books/medina/chapters";
-import { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS } from "../data/books/medina/index";
+import { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS, MEDINA_BOOK_3_CHAPTERS, MEDINA_BOOK_4_CHAPTERS } from "../data/books/medina/index";
 import { scale } from "../styles";
 
 export default function LessonsScreen() {
@@ -21,9 +21,20 @@ export default function LessonsScreen() {
   const { bookId } = useLocalSearchParams<{ bookId?: string }>();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const isBook2 = bookId === "2";
-  const chaptersData = isBook2 ? MEDINA_BOOK_2_CHAPTERS : MEDINA_BOOK_1_CHAPTERS;
-  const bookTitle = isBook2 ? "Книга вторая" : "Книга первая";
+  let chaptersData = MEDINA_BOOK_1_CHAPTERS;
+  let bookTitle = "Книга первая";
+
+  if (bookId === "2") {
+    chaptersData = MEDINA_BOOK_2_CHAPTERS;
+    bookTitle = "Книга вторая";
+  } else if (bookId === "3") {
+    chaptersData = MEDINA_BOOK_3_CHAPTERS;
+    bookTitle = "Книга третья";
+  } else if (bookId === "4") {
+    chaptersData = MEDINA_BOOK_4_CHAPTERS;
+    bookTitle = "Книга четвертая";
+  }
+
 
   const filteredChapters = chaptersData.filter(
     (chapter) =>

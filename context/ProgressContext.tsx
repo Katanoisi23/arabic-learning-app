@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { Animated, Dimensions, StyleSheet, Text, View } from "react-native";
-import { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS } from "../data/books/medina/index";
+import { MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS, MEDINA_BOOK_3_CHAPTERS, MEDINA_BOOK_4_CHAPTERS } from "../data/books/medina/index";
 
 const { width } = Dimensions.get("window");
 const guidelineBaseWidth = 375;
@@ -88,7 +88,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
       return;
     }
 
-    const allChapters = [...(MEDINA_BOOK_1_CHAPTERS || []), ...(MEDINA_BOOK_2_CHAPTERS || [])];
+    const allChapters = [...(MEDINA_BOOK_1_CHAPTERS || []), ...(MEDINA_BOOK_2_CHAPTERS || []), ...(MEDINA_BOOK_3_CHAPTERS || []), ...(MEDINA_BOOK_4_CHAPTERS || [])];
     let justCompleted = false;
 
     for (const chapter of allChapters) {

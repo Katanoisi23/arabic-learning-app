@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { BottomTabs } from "../../components/BottomTabs";
 import { useProgress } from "../../context/ProgressContext";
-import { getMedinaLesson, MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS } from "../../data/books/medina/index";
+import { getMedinaLesson, MEDINA_BOOK_1_CHAPTERS, MEDINA_BOOK_2_CHAPTERS, MEDINA_BOOK_3_CHAPTERS, MEDINA_BOOK_4_CHAPTERS } from "../../data/books/medina/index";
 import { scale } from "../../styles";
 
 
@@ -98,7 +98,7 @@ export default function LessonScreen() {
           <Text style={styles.headerTitle}>
             {(() => {
               if (!lesson) return "";
-              const allChapters = [...(MEDINA_BOOK_1_CHAPTERS || []), ...(MEDINA_BOOK_2_CHAPTERS || [])];
+              const allChapters = [...(MEDINA_BOOK_1_CHAPTERS || []), ...(MEDINA_BOOK_2_CHAPTERS || []), ...(MEDINA_BOOK_3_CHAPTERS || []), ...(MEDINA_BOOK_4_CHAPTERS || [])];
               const chapter = allChapters.find(c => c?.lessonIds?.includes(lesson.id));
               if (chapter) {
                 const index = chapter.lessonIds.indexOf(lesson.id);
