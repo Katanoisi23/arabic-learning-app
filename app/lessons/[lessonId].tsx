@@ -187,11 +187,6 @@ const styles = StyleSheet.create({
     borderRadius: scale(20),
     padding: scale(24),
     marginBottom: scale(16),
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: scale(4) },
-    shadowOpacity: 0.05,
-    shadowRadius: scale(8),
-    elevation: 3,
   },
   speakerBadge: {
     alignSelf: "flex-start",

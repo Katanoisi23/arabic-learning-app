@@ -132,11 +132,6 @@ const styles = StyleSheet.create({
     paddingVertical: scale(12),
     borderRadius: scale(24),
     zIndex: 9999,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: scale(4) },
-    shadowOpacity: 0.15,
-    shadowRadius: scale(8),
-    elevation: 5,
   },
   toastText: {
     color: "#FFFFFF",
